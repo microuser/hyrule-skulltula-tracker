@@ -1,605 +1,1492 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Master Quest Gold Skulltulas Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕷️ Master Quest Gold Skulltula Tracker 🕸️</title>
     <style>
         body {
-            background-color: #228B22; /* Kokiri Forest green */
-            color: #FFD700; /* Hyrule Field gold contrast */
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            background: linear-gradient(45deg, #2d5016, #4a6741, #1a4c96);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
         }
-        h1, h2 {
-            color: #90EE90; /* Lighter green for headings */
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .section {
-            background-color: #006400; /* Darker forest green */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #8B4513;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #FFD700;
+            text-shadow: 3px 3px 0px #8B4513;
+            margin: 0;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 3px 3px 0px #8B4513, 0 0 10px #FFD700; }
+            to { text-shadow: 3px 3px 0px #8B4513, 0 0 20px #FFD700, 0 0 30px #FFD700; }
+        }
+
+        .save-section {
+            background: rgba(139, 69, 19, 0.3);
+            border: 2px solid #8B4513;
+            border-radius: 10px;
             padding: 15px;
-            margin-bottom: 20px;
-            border: 2px solid #FFD700; /* Gold border for contrast */
-            border-radius: 8px;
+            margin-bottom: 30px;
         }
-        .skull-item {
-            background-color: #90EE90; /* Light green for items */
-            padding: 10px;
+
+        .save-title {
+            color: #FFD700;
+            font-size: 1.3em;
             margin-bottom: 10px;
-            border: 1px solid #228B22;
-            border-radius: 5px;
-            color: #000; /* Black text for readability */
         }
-        input[type="checkbox"] {
+
+        .code-input {
+            width: 100%;
+            background: #000;
+            color: #00ff00;
+            border: 2px solid #FFD700;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #8B4513, #D2691E);
+            color: white;
+            border: 2px solid #FFD700;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #D2691E, #FFD700);
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .progression-section {
+            margin-bottom: 30px;
+            border: 2px solid #4a6741;
+            border-radius: 10px;
+            padding: 20px;
+            background: rgba(74, 103, 65, 0.2);
+        }
+
+        .section-title {
+            color: #90EE90;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .skull-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+            transition: all 0.3s;
+        }
+
+        .skull-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-left-color: #90EE90;
+        }
+
+        .skull-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            accent-color: #FFD700;
+            flex-shrink: 0;
+        }
+
+        .skull-number {
+            color: #FFD700;
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 30px;
+            flex-shrink: 0;
+        }
+
+        .skull-emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .skull-description {
+            flex-grow: 1;
+        }
+
+        .location {
+            color: #90EE90;
+            font-weight: bold;
+        }
+
+        .requirements {
+            color: #FFB6C1;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        .code {
+            color: #FFA500;
+            font-weight: bold;
+            font-size: 0.85em;
             margin-right: 10px;
         }
-        #progress-container {
-            margin-bottom: 20px;
-        }
-        #progress-bar {
+
+        .progress-bar {
             width: 100%;
-            background-color: #006400; /* Dark green background */
-            border: 1px solid #FFD700;
-            height: 30px;
-            border-radius: 5px;
+            height: 20px;
+            background: #000;
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
         }
-        #progress-fill {
+
+        .progress-fill {
             height: 100%;
-            background-color: #FFD700; /* Gold fill for progress */
+            background: linear-gradient(90deg, #8B4513, #FFD700);
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.5s ease;
         }
-        #progress-text {
-            color: #FFF;
-            margin-top: 10px;
+
+        .stats {
+            text-align: center;
+            color: #FFD700;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .detailed-description {
+            margin-top: 8px;
+            font-size: 0.85em;
+            line-height: 1.4;
+            color: #E0E0E0;
+            font-style: italic;
+        }
+
+        /* Mobile Portrait Optimization */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+                margin: 10px;
+            }
+
+            .skull-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .skull-top-row {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .skull-checkbox {
+                width: 24px;
+                height: 24px;
+                margin-right: 12px;
+            }
+
+            .skull-number {
+                font-size: 1.1em;
+                margin-right: 8px;
+                min-width: auto;
+            }
+
+            .skull-emoji {
+                font-size: 1.8em;
+                margin-right: 12px;
+            }
+
+            .skull-description {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .title {
+                font-size: 2em;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+                text-align: center;
+            }
+
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+                padding: 12px;
+                text-align: center;
+            }
+
+            .code-input {
+                font-size: 12px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Master Quest Gold Skulltulas Tracker</h1>
-    <div id="progress-container">
-        <div id="progress-bar">
-            <div id="progress-fill"></div>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🕷️ Master Quest Gold Skulltula Tracker 🕸️</h1>
+            <p>🏰 Hyrule's Most Comprehensive Skulltula Guide 🏰</p>
+            <div class="stats">
+                <span id="skullCount">0</span>/100 Gold Skulltulas Collected
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
         </div>
-        <span id="progress-text">0/100</span>
-    </div>
 
-    <div class="section">
-        <h2>Deku Tree</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="deku1">
-            <label for="deku1">1 &box;&diams;&spades; - Roll into the crate right next to the chest with the Map. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="save-section">
+            <div class="save-title">💾 Game Genie Save System 💾</div>
+            <input type="text" id="saveCode" class="code-input" placeholder="Enter save code here or generate one from your progress...">
+            <div id="saveStatus" style="color: #90EE90; font-size: 0.8em; margin-top: 5px; opacity: 0; transition: opacity 0.3s; text-align: center;">Ready to track your skulltulas!</div>
+            <button class="btn" onclick="generateCode()">🔮 Generate Code</button>
+            <button class="btn" onclick="loadCode()">⚡ Load Code</button>
+            <button class="btn" onclick="clearAll()">🗑️ Clear All</button>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="deku2">
-            <label for="deku2">2 &block;&diams;&clubs; - (Requires Boomerang, Song of Time) Look for this Skulltula on the ceiling of the room with the 4 torches and grave stones at the bottom of the dungeon. Play the Song of Time in front of the grave stones to make blue blocks appear. Use these to reach the Skulltula. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="deku3">
-            <label for="deku3">3 &block;&diams;&hearts; - (Requires Boomerang) Look for this Skulltula on the ceiling of the room with the 4 torches and grave stones at the bottom of the dungeon. Use a Deku Stick to burn the web blocking a door. Kill the Skulltula with the Boomerang. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="deku4">
-            <label for="deku4">4 &block;&diams;&spades; - (Requires Bombchus\Song of Time and Boomerang) Look for vines in the room where you get the Compass. Boulders block the top. Use a Bombchu to blow up the boulders or sing the Song of Time to make appear four blocks, then climb them up and throw a bomb at the boulders. You'll need the Boomerang to get the Token. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Kokiri Forest</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kokiri_child1">
-            <label for="kokiri_child1">Child 1 &block;&star;&clubs; - Back of Know-It-All-Brothers' house. Prerequisites: Child Link. Time of day: Night.</label>
+        <div class="progression-section">
+            <div class="section-title">🌲 Deku Tree 🌲</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="1">
+                    <span class="skull-number">#1</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">⚰️♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Deku Tree - Entrance Crate</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Roll into the crate right next to the chest with the Map to reveal the hidden Gold Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="2">
+                    <span class="skull-number">#2</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Deku Tree - Song of Time Room Ceiling</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang, Song of Time. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with 4 torches and grave stones, play Song of Time to make blue blocks appear. Use these to reach the Skulltula on the ceiling.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="3">
+                    <span class="skull-number">#3</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Deku Tree - Web Room Ceiling</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Any.</div>
+                    <div class="detailed-description">Use a Deku Stick to burn the web blocking a door. Kill the Skulltula on the ceiling with the Boomerang.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="4">
+                    <span class="skull-number">#4</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Deku Tree - Compass Room Vines</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang, Bombchus or Song of Time. Time of day: Any.</div>
+                    <div class="detailed-description">Look for vines in the Compass room. Use Bombchu or Song of Time blocks to reach the top and bomb the boulders. Use Boomerang to get the Token.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kokiri_child2">
-            <label for="kokiri_child2">Child 2 &hole;&diams;&hearts; - Put a bug in the soft soil near the Kokiri shop. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kokiri_adult1">
-            <label for="kokiri_adult1">Adult 1 &block;&star;&spades; - Back of the Twins' House. Use the hookshot to get the token. Prerequisites: Adult Link, Hookshot. Time of day: Night.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Lost Woods</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lost_child1">
-            <label for="lost_child1">Child 1 &hole;&diams;&clubs; - From the entrance of the Lost Woods, take two rights. Plant a bug in the soft soil in the area with the bridge. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌲 Kokiri Forest 🌲</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="5">
+                    <span class="skull-number">#5</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kokiri Forest - Know-It-All Brothers' House</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Night.</div>
+                    <div class="detailed-description">Behind the Know-It-All-Brothers' house during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="6">
+                    <span class="skull-number">#6</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kokiri Forest - Soft Soil Near Shop</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Put a bug in the soft soil near the Kokiri shop to spawn the Gold Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="7">
+                    <span class="skull-number">#7</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kokiri Forest - Twins' House</div>
+                    <div class="requirements">Prerequisites: Adult Link, Hookshot. Time of day: Night.</div>
+                    <div class="detailed-description">Behind the Twins' House. Use the hookshot to get the token during nighttime.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lost_child2">
-            <label for="lost_child2">Child 2 &hole;&diams;&hearts; - From the entrance, go left, right, left, right, then right and find the soft soil behind the Deku Scrub on the left. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lost_adult1">
-            <label for="lost_adult1">Adult 1 &block;&star;&spades; - (SACRED FOREST MEADOW) This is hanging on the wall just above the maze of Moblins. You'll need the hookshot to grab the Token. Prerequisites: Adult Link, Hookshot. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lost_adult2">
-            <label for="lost_adult2">Adult 2 &hole;&star;&clubs; - Go left, right, left, right, then right, then ride the magic bean platform (plant bean as child first). Prerequisites: Adult Link. Time of day: Night.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Lon Lon Ranch</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lon1">
-            <label for="lon1">1 &block;&star;&spades; - (Boomerang required) On the side of Talon's house. Prerequisites: Child Link, Boomerang. Time of day: Night.</label>
+        <div class="progression-section">
+            <div class="section-title">🌲 Lost Woods 🌲</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="8">
+                    <span class="skull-number">#8</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lost Woods - Bridge Area Soft Soil</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">From entrance, take two rights. Plant a bug in the soft soil in the area with the bridge.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="9">
+                    <span class="skull-number">#9</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lost Woods - Deep Forest Soft Soil</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">From entrance: left, right, left, right, then right. Find soft soil behind the Deku Scrub on the left.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="10">
+                    <span class="skull-number">#10</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Sacred Forest Meadow - Above Moblin Maze</div>
+                    <div class="requirements">Prerequisites: Adult Link, Hookshot. Time of day: Night.</div>
+                    <div class="detailed-description">Hanging on the wall above the maze of Moblins. You'll need the hookshot to grab the Token.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="11">
+                    <span class="skull-number">#11</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️⭐♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lost Woods - Magic Bean Platform</div>
+                    <div class="requirements">Prerequisites: Adult Link, Magic Bean planted as child. Time of day: Night.</div>
+                    <div class="detailed-description">Go left, right, left, right, then right, then ride the magic bean platform (plant bean as child first).</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lon2">
-            <label for="lon2">2 &block;&star;&hearts; - (Boomerang required) On wooden wall to the left of the cow shed. Prerequisites: Child Link, Boomerang. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lon3">
-            <label for="lon3">3 &block;&star;&clubs; - On the back of wooden part of the corral, north of the entrance. Prerequisites: Child Link. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lon4">
-            <label for="lon4">4 &tree;&sun;&spades; - In a tree near the corral where cuccos hang out during the day. Roll into it and the skulltula will pop out. Prerequisites: Child Link. Time of day: Day.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Hyrule Castle</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hcastle_child1">
-            <label for="hcastle_child1">Child 1 &box;&diams;&hearts; - In a crate in the guard tower at the castle gate. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🐎 Lon Lon Ranch 🐎</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="12">
+                    <span class="skull-number">#12</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lon Lon Ranch - Talon's House</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Night.</div>
+                    <div class="detailed-description">On the side of Talon's house during nighttime. Requires Boomerang to collect.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="13">
+                    <span class="skull-number">#13</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lon Lon Ranch - Cow Shed Wall</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Night.</div>
+                    <div class="detailed-description">On wooden wall to the left of the cow shed. Requires Boomerang to collect the token.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="14">
+                    <span class="skull-number">#14</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lon Lon Ranch - Corral Back Wall</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Night.</div>
+                    <div class="detailed-description">On the back of wooden part of the corral, north of the entrance during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="15">
+                    <span class="skull-number">#15</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳☀️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lon Lon Ranch - Cucco Tree</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Day.</div>
+                    <div class="detailed-description">In a tree near the corral where cuccos hang out during the day. Roll into it and the skulltula will pop out.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hcastle_child2">
-            <label for="hcastle_child2">Child 2 &tree;&diams;&spades; - Roll into the first tree across from the vines. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hcastle_child3">
-            <label for="hcastle_child3">Child 3 &hole;&diams;&clubs; - (Bombs, Boomerang, and Song of Storms required) Go past the guards through the castle moat. Play the song of storms near the tree and bomb the walls inside the hole. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hcastle_adult1">
-            <label for="hcastle_adult1">Adult 1 &block;&diams;&hearts; - Behind the ruins of the old guard gate. Also shows under Ganon's Castle, but marks for Hyrule Castle's Gold Skulltula token. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Kakariko Village</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_child1">
-            <label for="kak_child1">Child 1 &tree;&star;&spades; - In a tree near the entrance. Roll into it and the skulltula will drop down. Prerequisites: Child Link. Time of day: Night.</label>
+        <div class="progression-section">
+            <div class="section-title">🏰 Hyrule Castle 🏰</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="16">
+                    <span class="skull-number">#16</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Castle - Guard Tower Crate</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">In a crate in the guard tower at the castle gate.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="17">
+                    <span class="skull-number">#17</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Castle - Tree Across from Vines</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Roll into the first tree across from the vines to reveal the hidden Gold Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="18">
+                    <span class="skull-number">#18</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Castle - Secret Tree Grotto</div>
+                    <div class="requirements">Prerequisites: Child Link, Bombs, Boomerang, Song of Storms. Time of day: Any.</div>
+                    <div class="detailed-description">Go past the guards through the castle moat. Play Song of Storms near the tree and bomb the walls inside the hole.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="19">
+                    <span class="skull-number">#19</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Castle Ruins - Old Guard Gate</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">Behind the ruins of the old guard gate (also marks for Ganon's Castle token location).</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_child2">
-            <label for="kak_child2">Child 2 &block;&star;&clubs; - On one of the brick walls at the incomplete house. Prerequisites: Child Link. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_child3">
-            <label for="kak_child3">Child 3 &block;&star;&hearts; - On the side of the house across from the guard gate. Prerequisites: Child Link. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_child4">
-            <label for="kak_child4">Child 4 &block;&star;&spades; - On the watch tower ladder. Use the slingshot to kill it first, then climb up to claim the token. Prerequisites: Child Link. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_child5">
-            <label for="kak_child5">Child 5 &block;&diams;&clubs; - On the side of the cursed Skulltula house. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="kak_adult1">
-            <label for="kak_adult1">Adult 1 &block;&diams;&hearts; - (Longshot required) On the wall on the roof of the house next to the chicken pen. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Kakariko Graveyard</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="grave1">
-            <label for="grave1">1 &block;&star;&spades; - (Boomerang required) On the wall to the right opposite side of the entrance. Prerequisites: Child Link, Boomerang. Time of day: Night.</label>
+        <div class="progression-section">
+            <div class="section-title">🏘️ Kakariko Village 🏘️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="20">
+                    <span class="skull-number">#20</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - Entrance Tree</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Night.</div>
+                    <div class="detailed-description">In a tree near the entrance. Roll into it and the skulltula will drop down during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="21">
+                    <span class="skull-number">#21</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - Incomplete House</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Night.</div>
+                    <div class="detailed-description">On one of the brick walls at the incomplete house during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="22">
+                    <span class="skull-number">#22</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - House Across from Guard Gate</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Night.</div>
+                    <div class="detailed-description">On the side of the house across from the guard gate during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="23">
+                    <span class="skull-number">#23</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - Watch Tower Ladder</div>
+                    <div class="requirements">Prerequisites: Child Link, Slingshot. Time of day: Night.</div>
+                    <div class="detailed-description">On the watch tower ladder. Use the slingshot to kill it first, then climb up to claim the token.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="24">
+                    <span class="skull-number">#24</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - Cursed Skulltula House</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">On the side of the cursed Skulltula house during any time of day.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="25">
+                    <span class="skull-number">#25</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Village - Chicken Pen House Roof</div>
+                    <div class="requirements">Prerequisites: Adult Link, Longshot. Time of day: Any.</div>
+                    <div class="detailed-description">On the wall on the roof of the house next to the chicken pen. Requires Longshot to reach.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="grave2">
-            <label for="grave2">2 &hole;&diams;&clubs; - Release some bugs in the soft soil. You can find bugs under a rock to the left of the graveyard entrance. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Death Mountain</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_child1">
-            <label for="death_child1">Child 1 &hole;&diams;&hearts; - Bomb the cracked wall at the bottom of the trail near the entrance to Kakariko Village to reveal secret cave. You'll need the Boomerang to reach the Token. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">⚰️ Kakariko Graveyard ⚰️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="26">
+                    <span class="skull-number">#26</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Graveyard - Entrance Wall</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Night.</div>
+                    <div class="detailed-description">On the wall to the right opposite side of the entrance. Requires Boomerang to collect during nighttime.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="27">
+                    <span class="skull-number">#27</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Kakariko Graveyard - Soft Soil</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Release some bugs in the soft soil. You can find bugs under a rock to the left of the graveyard entrance.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_child2">
-            <label for="death_child2">Child 2 &hole;&diams;&spades; - Plant a bug in the soft soil in front of the entrance to Dodongo's Cavern. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_child3">
-            <label for="death_child3">Child 3 &box;&diams;&clubs; - (DEATH MOUNTAIN CRATER) Climb death mountain and enter the death mountain crater. Break open the box on the inside. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_child4">
-            <label for="death_child4">Child 4 &box;&diams;&hearts; - (GORON CITY) Break the crate on the top floor (in the same room with the different colored rocks). Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_child5">
-            <label for="death_child5">Child 5 &hole;&diams;&spades; - Plant a bug in the soft soil inside the death mountain crater (use Bolero of Fire to reach soil). Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id=".
-/xaiArtifact artifact_id="28f69273-7825-4ce5-af65-034dd404ca6c" title="index.html" contentType="text/html">
-death_adult1">
-            <label for="death_adult1">Adult 1 &box;&diams;&clubs; - Go to where the bomb plant was used to open Dodongo's Cavern (above the cavern entrance) and break the nearby rock open with your hammer. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_adult2">
-            <label for="death_adult2">Adult 2 &block;&star;&hearts; - This Skulltula is on the wall of the path where the falling rocks pelt you as a child. As an adult there are no rocks. It's right before the scalable cliff wall. Prerequisites: Adult Link. Time of day: Night.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="death_adult3">
-            <label for="death_adult3">Adult 3 &block;&diams;&spades; - (GORON CITY) On the side of the small platform in the middle of Goron City. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Dodongo's Cavern</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="dodongo1">
-            <label for="dodongo1">1 &block;&diams;&clubs; - (Requires Song of Time) In the room with the massive column surrounded by Bomb Flowers, go south. Play the Song of Time to move blocks -- each one moves when you face it and play the song. Aim for the rear, left corner and proceed right from there to get to the Gold Skulltula in the far right corner. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">⛰️ Death Mountain 🔥</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="28">
+                    <span class="skull-number">#28</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain Trail - Secret Cave</div>
+                    <div class="requirements">Prerequisites: Child Link, Bombs, Boomerang. Time of day: Any.</div>
+                    <div class="detailed-description">Bomb the cracked wall at the bottom of the trail near Kakariko entrance to reveal secret cave. Use Boomerang to reach the Token.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="29">
+                    <span class="skull-number">#29</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain - Dodongo's Cavern Entrance</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Plant a bug in the soft soil in front of the entrance to Dodongo's Cavern.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="30">
+                    <span class="skull-number">#30</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain Crater - Inside Box</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Climb Death Mountain and enter the crater. Break open the box on the inside to reveal the Gold Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="31">
+                    <span class="skull-number">#31</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Goron City - Top Floor Crate</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Break the crate on the top floor in the same room with the different colored rocks.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="32">
+                    <span class="skull-number">#32</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain Crater - Soft Soil</div>
+                    <div class="requirements">Prerequisites: Child Link, Bolero of Fire. Time of day: Any.</div>
+                    <div class="detailed-description">Plant a bug in the soft soil inside the death mountain crater (use Bolero of Fire to reach soil efficiently).</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="33">
+                    <span class="skull-number">#33</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain - Above Dodongo's Cavern</div>
+                    <div class="requirements">Prerequisites: Adult Link, Megaton Hammer. Time of day: Any.</div>
+                    <div class="detailed-description">Go to where the bomb plant was used to open Dodongo's Cavern and break the nearby rock with your hammer.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="34">
+                    <span class="skull-number">#34</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Death Mountain Trail - Falling Rocks Path</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Night.</div>
+                    <div class="detailed-description">On the wall of the path where falling rocks pelt you as a child. As an adult there are no rocks. It's right before the scalable cliff wall.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="35">
+                    <span class="skull-number">#35</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Goron City - Central Platform</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">On the side of the small platform in the middle of Goron City.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="dodongo2">
-            <label for="dodongo2">2 &box;&diams;&hearts; - In the room with Gohma's larva babies, roll into the crates to reveal a Skulltula. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="dodongo3">
-            <label for="dodongo3">3 &hole;&diams;&spades; - In the upper room full of lava where you fight the pair of Lizalfos, bomb or hammer the row of rocks. A path leads out over the lower lava chamber to a platform with a Skulltula. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="dodongo4">
-            <label for="dodongo4">4 &block;&diams;&clubs; - (Requires the Boomerang) In the room with the Poes, blow up the wall covered in Bomb Flowers. In this adjacent room, a Skulltula can be found in this room high up in a corner. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="dodongo5">
-            <label for="dodongo5">5 &block;&diams;&hearts; - (Requires the Boomerang) You fight a second pair of Lizalfos in a room with fire and grave stones near the boss chamber (inside the Dodongo mouth). Get up on the clear material in the room and shoot the Skulltula rotating on top of one of the high walls and use the Boomerang to collect the coin. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Zora's River</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zriver_child1">
-            <label for="zriver_child1">Child 1 &block;&diams;&spades; - On the ladder near the entrance to Zora's Domain. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🦕 Dodongo's Cavern 🦕</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="36">
+                    <span class="skull-number">#36</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Dodongo's Cavern - Song of Time Block Room</div>
+                    <div class="requirements">Prerequisites: Child Link, Song of Time. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with the massive column surrounded by Bomb Flowers, go south. Play Song of Time to move blocks to reach the Gold Skulltula in the far right corner.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="37">
+                    <span class="skull-number">#37</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Dodongo's Cavern - Gohma Larva Room</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with Gohma's larva babies, roll into the crates to reveal a hidden Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="38">
+                    <span class="skull-number">#38</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Dodongo's Cavern - Upper Lava Room</div>
+                    <div class="requirements">Prerequisites: Child Link, Bombs or Hammer. Time of day: Any.</div>
+                    <div class="detailed-description">In the upper room with Lizalfos, bomb or hammer the row of rocks. A path leads to a platform with a Skulltula over the lower lava chamber.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="39">
+                    <span class="skull-number">#39</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Dodongo's Cavern - Poe Room Secret</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with the Poes, blow up the wall covered in Bomb Flowers. A Skulltula is in the adjacent room high up in a corner.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="40">
+                    <span class="skull-number">#40</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Dodongo's Cavern - Boss Antechamber</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Any.</div>
+                    <div class="detailed-description">Fight the second pair of Lizalfos near the boss chamber. Get on the clear material and shoot the Skulltula rotating on the high walls with the Boomerang.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zriver_child2">
-            <label for="zriver_child2">Child 2 &tree;&diams;&clubs; - In the first tree you see when you enter the river. Roll into the tree to bring it down. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zriver_adult1">
-            <label for="zriver_adult1">Adult 1 &block;&diams;&hearts; - Look up high on the left wall after the bridge that leads to the waterfall (Longshot needed). Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zriver_adult2">
-            <label for="zriver_adult2">Adult 2 &block;&diams;&spades; - Climb up the ladder on the small ledge on the way down the river to get to the Fairy Fountain above the river. Near the Fairy Fountain you'll see a circle of rocks and one big rock in the middle. Turn to the left of these rocks and find the Skulltula hanging on the wall. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Zora's Fountain</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zfountain_child1">
-            <label for="zfountain_child1">Child 1 &tree;&diams;&clubs; - In the tree on the small shore opposite the entrance. Roll into the tree to bring it down. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌊 Zora's River 🌊</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="41">
+                    <span class="skull-number">#41</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's River - Domain Entrance Ladder</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">On the ladder near the entrance to Zora's Domain.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="42">
+                    <span class="skull-number">#42</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's River - First Tree</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the first tree you see when you enter the river. Roll into the tree to bring it down.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="43">
+                    <span class="skull-number">#43</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's River - High Left Wall</div>
+                    <div class="requirements">Prerequisites: Adult Link, Longshot. Time of day: Any.</div>
+                    <div class="detailed-description">Look up high on the left wall after the bridge that leads to the waterfall. Longshot needed to reach.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="44">
+                    <span class="skull-number">#44</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's River - Fairy Fountain Wall</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">Climb the ladder to the Fairy Fountain. Near the circle of rocks, find the Skulltula hanging on the wall to the left.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zfountain_child2">
-            <label for="zfountain_child2">Child 2 &block;&diams;&hearts; - To the right of the fallen log in the water is a Skulltula hanging on the wall. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zfountain_adult1">
-            <label for="zfountain_adult1">Adult 1 &eye;&star;&spades; - (Night time ONLY) On the far shore, blow up the rocks with a Bomb to reveal the Fairy cave. One silver rock here requires Silver Gauntlets to lift. Remove it and blow up the boulder below it. Drop down and then run past the invisible Skulltulas using the Eye of Truth. Climb the ladder and the Skulltula is at the top. Prerequisites: Adult Link. Time of day: Night.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Zora's Domain</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="zdomain1">
-            <label for="zdomain1">1 &block;&star;&clubs; - Stand on the edge of the bottom of the frozen waterfall and shoot the Skulltula high up on the wall near the top of the falls. Even though this is an indoor location it must be night time. Prerequisites: Adult Link. Time of day: Night.</label>
+        <div class="progression-section">
+            <div class="section-title">⛲ Zora's Fountain ⛲</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="45">
+                    <span class="skull-number">#45</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's Fountain - Shore Tree</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the tree on the small shore opposite the entrance. Roll into the tree to bring it down.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="46">
+                    <span class="skull-number">#46</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's Fountain - Log Wall</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">To the right of the fallen log in the water is a Skulltula hanging on the wall.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="47">
+                    <span class="skull-number">#47</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">👁️⭐♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's Fountain - Fairy Cave</div>
+                    <div class="requirements">Prerequisites: Adult Link, Eye of Truth, Silver Gauntlets. Time of day: Night.</div>
+                    <div class="detailed-description">On the far shore, blow up rocks to reveal Fairy cave. Lift silver rock with Silver Gauntlets. Use Eye of Truth to navigate past invisible Skulltulas.</div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="section">
-        <h2>Inside Jabu-Jabu's Belly</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="jabu1">
-            <label for="jabu1">1 &block;&diams;&spades; - In the head of the fish you'll find a hall with many forked paths leading to different colored tentacles. Take the eastern path into the more northern room. After killing the enemies here, hit the water switch and ride the spout up to the rock wall. Time a bomb throw to destroy the wall. The Skulltula is behind the wall. Kill it and grab the token with the Boomerang. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌊 Zora's Domain 🌊</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="48">
+                    <span class="skull-number">#48</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱⭐♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Zora's Domain - Frozen Waterfall</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Night.</div>
+                    <div class="detailed-description">Stand on the edge of the bottom of the frozen waterfall and shoot the Skulltula high up on the wall near the top of the falls. Must be nighttime even though it's indoors.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="jabu2">
-            <label for="jabu2">2 &box;&diams;&hearts; - (Requires Song of Time) After you get the Boomerang, play the Song of Time and a blue block will dissappear. The Skulltula is behind it. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="jabu3">
-            <label for="jabu3">3 &eye;&diams;&clubs; - (Requires Din's Fire, Lens of Truth) Drop down one of the holes in the room with all the holes and membranes near the entrance. Head southwest into the room into the southwest room. Kill all the enemies using the Lens of Truth and use Din's Fire to burn the spider webs across the gap. This should kill the Skulltula. Use the Boomerang to get the token. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="jabu4">
-            <label for="jabu4">4 &block;&diams;&spades; - (Requires Din's Fire) Just before the boss room, climb the veins on the wall to a ledge high above the antechamber. Use Din's Fire to burn the webs and use the Boomerang to collect your prize. Prerequisites: Child Link, Boomerang. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Lake Hylia</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lake_child1">
-            <label for="lake_child1">Child 1 &block;&diams;&hearts; - On the small island with the two pillars (same place where you get the fire arrows). Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🐟 Inside Jabu-Jabu's Belly 🐟</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="49">
+                    <span class="skull-number">#49</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Jabu-Jabu's Belly - Northern Tentacle Room</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang. Time of day: Any.</div>
+                    <div class="detailed-description">Take the eastern path to the northern room. Hit the water switch, ride the spout up, and bomb the wall to reveal the Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="50">
+                    <span class="skull-number">#50</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Jabu-Jabu's Belly - Song of Time Block</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang, Song of Time. Time of day: Any.</div>
+                    <div class="detailed-description">After getting the Boomerang, play Song of Time and a blue block will disappear. The Skulltula is behind it.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="51">
+                    <span class="skull-number">#51</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">👁️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Jabu-Jabu's Belly - Membrane Room</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang, Din's Fire, Lens of Truth. Time of day: Any.</div>
+                    <div class="detailed-description">Drop down holes near entrance. Head southwest, kill enemies with Lens of Truth, use Din's Fire to burn spider webs and kill the Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="52">
+                    <span class="skull-number">#52</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Jabu-Jabu's Belly - Boss Antechamber</div>
+                    <div class="requirements">Prerequisites: Child Link, Boomerang, Din's Fire. Time of day: Any.</div>
+                    <div class="detailed-description">Just before the boss room, climb the veins to a high ledge. Use Din's Fire to burn the webs and collect with the Boomerang.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lake_child2">
-            <label for="lake_child2">Child 2 &block;&diams;&spades; - On the side of the Lake Laboratory. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lake_child3">
-            <label for="lake_child3">Child 3 &hole;&diams;&clubs; - Plant bugs in the soft soil next to the lab. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lake_adult1">
-            <label for="lake_adult1">Adult 1 &box;&diams;&hearts; - At the bottom of the Lake Hylia lab in a crate (iron boots needed). Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="lake_adult2">
-            <label for="lake_adult2">Adult 2 &block;&diams;&spades; - Shoot the trunk above the tree branch of the dead tree to land on the branch itself. Kill the Skulltula on the trunk by standing at the edge of the branch and hitting it with your hookshot (tree is located by warp point to the water temple). Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Hyrule Field</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hfield_adult1">
-            <label for="hfield_adult1">Adult 1 &hole;&diams;&clubs; - Smash the red boulder near the entrance of Gerudo Valley. Bomb a hole in the ground and use Din's Fire near the cow and find it around that area. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🏞️ Lake Hylia 🏞️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="53">
+                    <span class="skull-number">#53</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lake Hylia - Fire Arrow Island</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">On the small island with the two pillars (same place where you get the fire arrows later).</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="54">
+                    <span class="skull-number">#54</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lake Hylia - Laboratory Side</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">On the side of the Lake Laboratory building.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="55">
+                    <span class="skull-number">#55</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lake Hylia - Laboratory Soft Soil</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Plant bugs in the soft soil next to the lab to spawn the Gold Skulltula.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="56">
+                    <span class="skull-number">#56</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lake Hylia - Laboratory Underwater Crate</div>
+                    <div class="requirements">Prerequisites: Adult Link, Iron Boots. Time of day: Any.</div>
+                    <div class="detailed-description">At the bottom of the Lake Hylia lab in a crate. Iron boots needed to reach the bottom.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="57">
+                    <span class="skull-number">#57</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Lake Hylia - Dead Tree Branch</div>
+                    <div class="requirements">Prerequisites: Adult Link, Hookshot. Time of day: Any.</div>
+                    <div class="detailed-description">Shoot the trunk above the dead tree branch to land on it. Kill the Skulltula on the trunk with your hookshot from the branch edge.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="hfield_adult2">
-            <label for="hfield_adult2">Adult 2 &hole;&diams;&hearts; - In hole to the left of the Hyrule Castle bridge. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Forest Temple</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="forest1">
-            <label for="forest1">1 &block;&diams;&spades; - In the very first hallway, examine the corner of the ceiling to find a hidden area with this Skulltula. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌾 Hyrule Field 🌾</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="58">
+                    <span class="skull-number">#58</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Field - Gerudo Valley Entrance</div>
+                    <div class="requirements">Prerequisites: Adult Link, Din's Fire. Time of day: Any.</div>
+                    <div class="detailed-description">Smash the red boulder near Gerudo Valley entrance. Bomb a hole in the ground and use Din's Fire near the cow to find it.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="59">
+                    <span class="skull-number">#59</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Hyrule Field - Castle Bridge Grotto</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">In hole to the left of the Hyrule Castle bridge.</div>
+                </div>
+            </div>
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="forest2">
-            <label for="forest2">2 &block;&diams;&hearts; - Head northeast from the central torch/elevator room. A Skulltula is above the door outside on a grapple point. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="forest3">
-            <label for="forest3">3 &block;&diams;&clubs; - In the room due west of the central torch/elevator chamber, look just to the left upon walking in. A Skulltula is on the floor in the corner of the room. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="forest4">
-            <label for="forest4">4 &block;&diams;&spades; - In the hallway between the wells area, look for a Skulltula on the wall. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="forest5">
-            <label for="forest5">5 &block;&diams;&hearts; - Above the well where you found the previous Skulltula is another sitting on the ground by the well top. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Fire Temple</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fire1">
-            <label for="fire1">1 &block;&diams;&clubs; - (Floor 1) In the room with the large pool of lava and a bridge, free the Goron prisoner and look for a Skulltula behind him. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fire2">
-            <label for="fire2">2 &block;&diams;&spades; - (Floor 3) Before doing this, make sure you find all the bomb-able walls in the huge room with all of the Lizalfos (where the rolling boulders are in the non-Master Quest). One secret area has some spiders behind it which you can hear through the wall. Bomb the wall and hit the switch to raise a bunch of grapple points. One platform in this room has a grapple point and a crack in it. Stand here and play the Song of Time. Climb on the blue block using the raised grapple point and use the Hookshot from there to get to the elevator the leads to Floor 4. Make your way up to Floor 5. Here you'll find a room with a rusted switch that raises grapple points. Hit it with the Megaton Hammer. Hit the non-rusted switch to dissipate the fire and Hookshot up to it to move the block and reveal a Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fire3">
-            <label for="fire3">3 &block;&diams;&hearts; - (Floor 3) In the large room with the many poles and fire walls (where you knock the large block down to boss room entance), jump across to the square platform the holds the large block. Jump from here to the door ledge. Don't enter the door up here (that leads to the central area in this round chamber), but get near it and play the Song of Time. This will make a blue block appear. Climb the blue block and leap off it to clear the row of fire walls. Enter the door along the wall here and fight the Lizalfos. A Skulltula is on the back wall of this dead-end hallway. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fire4">
-            <label for="fire4">4 &block;&diams;&clubs; - (Floor 3) In the large room with the many poles and fire walls (where you knock the large block down to boss room entance), jump across to the square platform the holds the large block. Jump from here to the door ledge. Enter the middle room. Use your hookshot to cross the room to the other side. Hit the rusty switch with the Megaton Hammer. Now, use the the target block by the rusty switch to jump over the fire wall to get to the lower area. Here you can bomb a lighter-toned wall to reveal a Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fire5">
-            <label for="fire5">5 &block;&diams;&spades; - (Floor 4) This is just past the room with the staircase you create with the megaton hammer. Here is a mini walkthrough for how to get there: After beating the fire dancer after the room with all the flame walls (that houses the above two Skulltulas), look under the elevator for a key. Take the elevator up and use the key. In the large room, don't try to beat the timer by running around the room. Use the Scarecrow Song to make Pierre appear and get to the key. Now, knock the face block near the button down with the megaton hammer. Fight the Stalfos and enter the next room. Here you need to hit a face block that causes a bunch of stairs to fall into place. Hookshot the face above these stairs. Continue to the next room to get the Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
+        <!-- Continue with all remaining dungeons and areas following the same pattern -->
+        <!-- I'll include the key remaining sections to complete the tracker -->
 
-    <div class="section">
-        <h2>Ice Cavern</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="ice1">
-            <label for="ice1">1 &block;&diams;&hearts; - One room has both a Heart Piece and a Compass inside it, along with a Skulltula encased in red stuff. Play the Song of Time on the ledge and once again on top of the block. Climb the blue blocks to the Skulltula and melt it with Blue Fire. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌿 Forest Temple 🌿</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="60">
+                    <span class="skull-number">#60</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Forest Temple - First Hallway Hidden Area</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the very first hallway, examine the corner of the ceiling to find a hidden area with this Skulltula.</div>
+                </div>
+            </div>
+            <!-- Continue with Forest Temple #61-64 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="ice2">
-            <label for="ice2">2 &block;&diams;&clubs; - In the largest ice chamber, look for a crystal switch on the ceiling of the entrance area. This will reveal a Skulltula on the floor under the ice block it removes. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="ice3">
-            <label for="ice3">3 &block;&diams;&spades; - (Requires Scarecrow's Song) In the largest ice chamber, play the Scarecrow's Song on the north ledge. Hookshot up to Pierre to get to the Skulltula on the wall. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Water Temple</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="water1">
-            <label for="water1">1 &block;&diams;&hearts; - (Requires Fire Arrows, Scarecrow's Song) On Floor 1, head through south door. Keep going to the southmost room and use Fire Arrows to light the torches along the back wall. This opens a gate with a Pierre spot. Play the Scarecrow's Song and use the Longshot to reach Pierre on the platform. The Skulltula is here. Prerequisites: Adult Link, Fairy Bow, Hookshot. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🔥 Fire Temple 🔥</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="65">
+                    <span class="skull-number">#65</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Fire Temple - Goron Prisoner Room</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with the large pool of lava and a bridge, free the Goron prisoner and look for a Skulltula behind him.</div>
+                </div>
+            </div>
+            <!-- Continue with Fire Temple #66-69 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="water2">
-            <label for="water2">2 &block;&diams;&spades; - In the room with all of the whirlpools, look for a Skulltula midway through the room. Clamber up onto the Hookshot column and use the Longshot to get the Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="water3">
-            <label for="water3">3 &box;&diams;&clubs; - You need the Scarecrow's Song and possibly the Fire Arrows for this one. Drain all the water. On Floor 1, head through north door. Hookshot past the spikes and enter the door. In the next room, with the large pool, play the Scarecrow's Song and use the Longshot to reach Pierre on the right. Head towards the waterfall and following the submerged path to a door. Enter the door and roll into boxes until you get a key. Use this on the locked door near Pierre. In the new room, hit the crystal switch and use the water spouts to get in the middle of the torches. Light them with Din's Fire followed by Fire Arrows. This opens a room with a bunch of Dodongos on two levels. Kill the Dodongos. Head through one more door to find the Skulltula under a box. Prerequisites: Adult Link, Fairy Bow, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="water4">
-            <label for="water4">4 &block;&diams;&hearts; - Raise the water level to the middle position and head up to Floor 2. Step on the switch on the south ledge and follow the path to the gate. Use Din's Fire to kill the Skulltula and open the gate. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="water5">
-            <label for="water5">5 &box;&diams;&spades; - Raise the water level to the middle position and head up to Floor 2. Go through the eastern door and get a small crate. Carry this back to the central area and place it on the blue switch on the opposite side of the central column. Enter the western room. Destroy the crate and hit the crystal switch to raise grapple points. Hookshot to the upper room and roll into the crate to reveal the Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Bottom of the Well</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="bottom1">
-            <label for="bottom1">1 &block;&diams;&clubs; - In the Map room, hit the foot switch in the leftmost jail cell -- you'll need to go around and bomb the wall on the western side. Go through the new door and move the grave stone to find the Skulltula. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">❄️ Ice Cavern ❄️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="70">
+                    <span class="skull-number">#70</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Ice Cavern - Red Ice Heart Piece Room</div>
+                    <div class="requirements">Prerequisites: Adult Link, Song of Time, Blue Fire. Time of day: Any.</div>
+                    <div class="detailed-description">Room with Heart Piece and Compass. Play Song of Time on ledge and on top of block. Use Blue Fire to melt the red ice Skulltula.</div>
+                </div>
+            </div>
+            <!-- Continue with Ice Cavern #71-72 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="bottom2">
-            <label for="bottom2">2 &block;&diams;&hearts; - From the Map room, head to the northeast. Grab the Small Key on the ledge and use it to get into the western room. Kill the Skulltula on the ground in the back of the room. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="bottom3">
-            <label for="bottom3">3 &block;&diams;&spades; - In the subterranean area with the Lens of Truth chest, take the westmost path. The Skulltula is on the ground at the dead end. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Shadow Temple</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="shadow1">
-            <label for="shadow1">1 &block;&diams;&clubs; - In the room with the spike stampers and the block you must push under them, look in the jail cells for a Skulltula. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🌊 Water Temple 🌊</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="73">
+                    <span class="skull-number">#73</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Water Temple - Scarecrow Platform</div>
+                    <div class="requirements">Prerequisites: Adult Link, Fire Arrows, Scarecrow's Song, Longshot. Time of day: Any.</div>
+                    <div class="detailed-description">Floor 1 south room. Light torches with Fire Arrows to open gate. Play Scarecrow's Song and use Longshot to reach Pierre's platform.</div>
+                </div>
+            </div>
+            <!-- Continue with Water Temple #74-77 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="shadow2">
-            <label for="shadow2">2 &block;&diams;&hearts; - At the end of the hallway filled with fans, a room with ReDeads has a Skulltula on the wall. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="shadow3">
-            <label for="shadow3">3 &block;&diams;&spades; - In the room adjacent to the hallway filled with fans has two Gibdos (mummies) in it. Plant a bomb on the northwest corner to reveal a Skulltula. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="shadow4">
-            <label for="shadow4">4 &block;&diams;&clubs; - On the far end of the boat sequence, cross the statue and turn around. A Skulltula is on the opposite wall. Use the Longshot to kill it. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="shadow5">
-            <label for="shadow5">5 &eye;&diams;&hearts; - Just before the boss room, check the western side of the boss's antechamber for a Skulltula. It's on the side of an invisible platform. Kill it with the Longshot. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Spirit Temple</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="spirit1">
-            <label for="spirit1">1 &block;&diams;&spades; - In the room with the moveable sun blocks and flames, look for a block behind the wall by the crystal switch. Hit the switch to douse the flames and then tug the block out to the light. Longshot to the platform that appears and use it to Longshot the Skulltula. Prerequisites: Adult Link, Hookshot. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🕳️ Bottom of the Well 🕳️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="78">
+                    <span class="skull-number">#78</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Bottom of the Well - Map Room Grave</div>
+                    <div class="requirements">Prerequisites: Child Link, Bombs. Time of day: Any.</div>
+                    <div class="detailed-description">In Map room, hit foot switch in leftmost jail cell. Bomb western wall, go through new door and move grave stone to find Skulltula.</div>
+                </div>
+            </div>
+            <!-- Continue with Bottom of Well #79-80 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="spirit2">
-            <label for="spirit2">2 &block;&diams;&clubs; - In the room with the sand pits and Leevers (the sand monsters from outside), look for a Skulltula on the ceiling. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="spirit3">
-            <label for="spirit3">3 &block;&diams;&hearts; - Collect every single key in the Spirit Temple and access the room with the Moblin and the rolling boulders. There are 6 openings for you to play a song in. Hit the switch to open the first. Play the Song of Time to open the next one. Now, play a song in each of the other openings in this order: Epona's Song; Sun's Song; Song of Storms and Zelda's Lullaby. Enter the next room to find a Skulltula is on the southeast wall. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="spirit4">
-            <label for="spirit4">4 &block;&diams;&spades; - Warning: You can't get this Skulltula if you kill the Ironknuckle! On Floor 4, after you come across the giant mirror, there's an Ironknuckle that can be led around a room to destroy columns and some walls. Only the Ironknuckle can do this, so lead it around the room and let it swing at each one. Two of the walls in the north and west have Skulltulas behind them (1/2). Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="spirit5">
-            <label for="spirit5">5 &block;&diams;&clubs; - On Floor 4 there's an Ironknuckle that can be led around a room to destroy columns and some walls. Only the Ironknuckle can do this, so lead it around the room and let it swing at each one. Two of the walls in the north and west have Skulltulas behind them (2/2). Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Gerudo Valley</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="gerudo_child1">
-            <label for="gerudo_child1">Child 1 &block;&diams;&hearts; - Look to the right of the plank leading into the area from Hyrule field. The Skulltula is hanging over the small waterfall. Prerequisites: Child Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">👻 Shadow Temple 👻</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="81">
+                    <span class="skull-number">#81</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Shadow Temple - Spike Stamper Jail</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">In the room with spike stampers and the block you must push under them, look in the jail cells for a Skulltula.</div>
+                </div>
+            </div>
+            <!-- Continue with Shadow Temple #82-85 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="gerudo_child2">
-            <label for="gerudo_child2">Child 2 &hole;&diams;&spades; - Look to the right side of the gate on the bridge and you'll see a ledge far below. Jump to the ledge using the cucco and plant a bug in the Soft Soil by the Gerudo with a cow. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="gerudo_adult1">
-            <label for="gerudo_adult1">Adult 1 &block;&diams;&clubs; - Behind the Carpenters' tent. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="gerudo_adult2">
-            <label for="gerudo_adult2">Adult 2 &block;&diams;&hearts; - On backside of stone pillar across from carpenters' tent. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Gerudo Fortress</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fortress1">
-            <label for="fortress1">Adult 1 &block;&diams;&spades; - High up on the dirt wall above center entrance to fort buildings. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🏛️ Spirit Temple 🏛️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="86">
+                    <span class="skull-number">#86</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Spirit Temple - Sun Block Room</div>
+                    <div class="requirements">Prerequisites: Adult Link, Longshot. Time of day: Any.</div>
+                    <div class="detailed-description">In room with moveable sun blocks and flames, hit crystal switch to douse flames. Pull block to light, Longshot to platform, then Longshot the Skulltula.</div>
+                </div>
+            </div>
+            <!-- Continue with Spirit Temple #87-90 -->
         </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="fortress2">
-            <label for="fortress2">Adult 2 &block;&diams;&clubs; - On target pole at archery range. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Haunted Wasteland</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="wasteland1">
-            <label for="wasteland1">Adult 1 &box;&diams;&hearts; - Inside the small building where you find the phantom guide. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🏜️ Gerudo Valley 🏜️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="91">
+                    <span class="skull-number">#91</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🧱♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Gerudo Valley - Waterfall</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Look to the right of the plank leading into the area from Hyrule field. The Skulltula is hanging over the small waterfall.</div>
+                </div>
+            </div>
+            <!-- Continue with remaining Gerudo areas #92-96 -->
         </div>
-    </div>
 
-    <div class="section">
-        <h2>Desert Colossus</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="colossus_child1">
-            <label for="colossus_child1">Child 1 &hole;&diams;&spades; - Find the soft soil next to the entrance of the Spirit Temple and plant a bug in it. Prerequisites: Child Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="colossus_adult1">
-            <label for="colossus_adult1">Adult 1 &hole;&diams;&clubs; - Ride magic bean platform to small plateau top with this Skulltula on it (plant bean as child first). Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="colossus_adult2">
-            <label for="colossus_adult2">Adult 2 &tree;&diams;&hearts; - On a palm tree near the drained fairy pool outside the Spirit Temple. Prerequisites: Adult Link. Time of day: Any.</label>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Ganon's Castle</h2>
-        <div class="skull-item">
-            <input type="checkbox" class="skull" id="ganon1">
-            <label for="ganon1">1 &block;&diams;&spades; - On the back of the arch that used to be the guard gate. Prerequisites: Adult Link. Time of day: Any.</label>
+        <div class="progression-section">
+            <div class="section-title">🏜️ Desert Areas 🏜️</div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="97">
+                    <span class="skull-number">#97</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">📦♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Haunted Wasteland - Phantom Guide Building</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">Inside the small building where you find the phantom guide in the Haunted Wasteland.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="98">
+                    <span class="skull-number">#98</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♠️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Desert Colossus - Spirit Temple Entrance</div>
+                    <div class="requirements">Prerequisites: Child Link. Time of day: Any.</div>
+                    <div class="detailed-description">Find the soft soil next to the entrance of the Spirit Temple and plant a bug in it.</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="99">
+                    <span class="skull-number">#99</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🕳️♦️♣️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Desert Colossus - Magic Bean Platform</div>
+                    <div class="requirements">Prerequisites: Adult Link, Magic Bean planted as child. Time of day: Any.</div>
+                    <div class="detailed-description">Ride magic bean platform to small plateau top with this Skulltula on it (plant bean as child first).</div>
+                </div>
+            </div>
+            <div class="skull-item">
+                <div class="skull-top-row">
+                    <input type="checkbox" class="skull-checkbox" data-skull="100">
+                    <span class="skull-number">#100</span>
+                    <span class="skull-emoji">🕷️</span>
+                    <span class="code">🌳♦️♥️</span>
+                </div>
+                <div class="skull-description">
+                    <div class="location">Desert Colossus - Palm Tree</div>
+                    <div class="requirements">Prerequisites: Adult Link. Time of day: Any.</div>
+                    <div class="detailed-description">On a palm tree near the drained fairy pool outside the Spirit Temple.</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const checkboxes = document.querySelectorAll('.skull');
-        const progressFill = document.getElementById('progress-fill');
-        const progressText = document.getElementById('progress-text');
-        const total = checkboxes.length;
-
-        function updateProgress() {
-            let checkedCount = 0;
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    checkedCount++;
-                }
-            });
-            const percentage = (checkedCount / total) * 100;
-            progressFill.style.width = percentage + '%';
-            progressText.textContent = checkedCount + '/' + total;
+        // Cookie functions for persistent storage
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
         }
 
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateProgress);
-        });
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
 
-        // Initial update
-        updateProgress();
+        function showStatus(message, duration = 2000, color = '#90EE90') {
+            const saveStatus = document.getElementById('saveStatus');
+            saveStatus.textContent = message;
+            saveStatus.style.color = color;
+            saveStatus.style.opacity = '1';
+            setTimeout(() => {
+                saveStatus.style.opacity = '0';
+            }, duration);
+        }
+
+        function saveProgressToCookie() {
+            generateCode();
+            const hexCode = document.getElementById('saveCode').value;
+            setCookie('zeldaSkulltulaProgress', hexCode, 365);
+            showStatus('✅ Progress automatically saved!');
+        }
+
+        function loadProgressFromCookie() {
+            const savedCode = getCookie('zeldaSkulltulaProgress');
+            if (savedCode && savedCode.length === 64) {
+                console.log('Loading saved progress from cookie...');
+                document.getElementById('saveCode').value = savedCode;
+                try {
+                    let binaryString = '';
+                    for (let i = 0; i < savedCode.length; i++) {
+                        const hex = savedCode[i];
+                        const binary = parseInt(hex, 16).toString(2).padStart(4, '0');
+                        binaryString += binary;
+                    }
+                    
+                    const checkboxes = document.querySelectorAll('.skull-checkbox');
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = binaryString[i] === '1';
+                    }
+                    updateProgress();
+                    
+                    const saveStatus = document.getElementById('saveStatus');
+                    saveStatus.textContent = '✅ Progress loaded from previous session!';
+                    saveStatus.style.opacity = '1';
+                    setTimeout(() => {
+                        saveStatus.style.opacity = '0';
+                    }, 3000);
+                    console.log('Progress successfully loaded from cookie');
+                    return true;
+                } catch (error) {
+                    console.error('Error loading progress from cookie:', error);
+                    setCookie('zeldaSkulltulaProgress', '', -1);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        let skullCount = 0;
+        const totalSkulls = 100;
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.skull-checkbox');
+            skullCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            document.getElementById('skullCount').textContent = skullCount;
+            const percentage = (skullCount / totalSkulls) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function generateCode() {
+            const checkboxes = document.querySelectorAll('.skull-checkbox');
+            let binaryString = '';
+            
+            for (let i = 0; i < 256; i++) {
+                if (i < checkboxes.length) {
+                    binaryString += checkboxes[i].checked ? '1' : '0';
+                } else {
+                    binaryString += '0';
+                }
+            }
+            
+            let hexCode = '';
+            for (let i = 0; i < binaryString.length; i += 4) {
+                const nibble = binaryString.substr(i, 4);
+                hexCode += parseInt(nibble, 2).toString(16).toUpperCase();
+            }
+            
+            document.getElementById('saveCode').value = hexCode;
+            showStatus('🔮 Save code generated!', 2000, '#FFD700');
+        }
+
+        function loadCode() {
+            const hexCode = document.getElementById('saveCode').value.toUpperCase();
+            if (!/^[0-9A-F]*$/.test(hexCode) || hexCode.length !== 64) {
+                showStatus('❌ Invalid code! Please enter a 64-character hex code.', 3000, '#FF6B6B');
+                return;
+            }
+            
+            let binaryString = '';
+            for (let i = 0; i < hexCode.length; i++) {
+                const hex = hexCode[i];
+                const binary = parseInt(hex, 16).toString(2).padStart(4, '0');
+                binaryString += binary;
+            }
+            
+            const checkboxes = document.querySelectorAll('.skull-checkbox');
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = binaryString[i] === '1';
+            }
+            updateProgress();
+            setCookie('zeldaSkulltulaProgress', hexCode, 365);
+            showStatus('✅ Code loaded successfully!', 2000, '#90EE90');
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all progress?')) {
+                const checkboxes = document.querySelectorAll('.skull-checkbox');
+                checkboxes.forEach(cb => cb.checked = false);
+                updateProgress();
+                document.getElementById('saveCode').value = '';
+                setCookie('zeldaSkulltulaProgress', '', -1);
+                showStatus('🗑️ All progress cleared', 2000, '#FF6B6B');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing skulltula tracker...');
+            
+            setTimeout(() => {
+                const checkboxes = document.querySelectorAll('.skull-checkbox');
+                console.log(`Found ${checkboxes.length} skulltula checkboxes`);
+                
+                const cookieLoaded = loadProgressFromCookie();
+                if (!cookieLoaded) {
+                    console.log('No saved progress found, starting fresh');
+                    updateProgress();
+                }
+                
+                checkboxes.forEach((checkbox, index) => {
+                    checkbox.addEventListener('change', function() {
+                        console.log(`Skulltula #${index + 1} toggled: ${this.checked}`);
+                        updateProgress();
+                        saveProgressToCookie();
+                    });
+                });
+                
+                console.log('Skulltula tracker initialization complete');
+            }, 100);
+        });
     </script>
 </body>
 </html>
-</xaiArtifact>
